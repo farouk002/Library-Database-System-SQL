@@ -1,0 +1,54 @@
+SELECT publishingHouse, Title
+FROM Books,Publisher
+WHERE publishingHouse = 'Wiley'
+AND AuthorFirstName = 'Christopher'
+AND AuthorLastName = 'Hadnagy'
+ORDER BY Title ASC
+
+
+SELECT Checkout.Libcard_num, Checkout.Due_date, Books.Title, BookLocation.Library_branch
+FROM Checkout
+INNER JOIN Books ON Books.Barcode_number = Checkout.Barcode_number
+INNER JOIN BookLocation ON Books.Barcode_number = BookLocation.Barcode_number 
+ORDER BY Checkout.Due_date;
+
+-- Shows title of book that reader checked out and due date and what library branch the book is from
+
+
+Select Libcard_num, CheckOut, CheckInDate ,Title
+From Readers, Checkout ,CheckIn , Books
+WHERE Libcard_num = '724946821'
+AND CheckInDate >= '01-01-22'
+ORDER BY CheckOut ASC ,Title ;
+
+-- Shows what books did the user check in and out from the start of 22 ordered from oldest to most recent
+
+
+
+
+CREATE VIEW YongeSt_books AS
+SELECT Barcode_number, Library_branch
+From BookLocation
+WHERE Library_branch = 'Yonge St';
+
+SELECT * FROM YongeSt_books
+
+--Shows the listings of book items by barcode number from the “Yonge St” branch
+
+
+CREATE VIEW Book_info AS
+SELECT Title,AuthorFirstName,AuthorLastName, Genre,ISBN,publishingHouse
+FROM Books
+ORDER BY Title;
+
+//to use view
+SELECT * FROM Book_info;
+
+CREATE VIEW publisherInfo AS
+SELECT yearPublished , publisherID, publishingHouse 
+From Publisher
+WHERE publishingHouse = 'wiley'
+
+SELECT * FROM publisherInfo
+
+--Shows the listings of books by year published from 'wiley' publishing house

@@ -1,0 +1,89 @@
+drop table Readers cascade constraints;
+drop table Staff cascade constraints;
+drop table Validation cascade constraints;
+drop table Books cascade constraints;
+drop table Checkout cascade constraints;
+drop table CheckIn cascade constraints;
+drop table BookLocation cascade constraints;
+drop table Publisher cascade constraints;
+
+CREATE TABLE Readers(
+   Libcard_num NUMBER(20) PRIMARY KEY NOT NULL,
+   Address VARCHAR2(50) NOT NULL,
+   Email VARCHAR2 (30) NOT NULL,
+   First_name VARCHAR2(20) NOT NULL,
+   Last_name VARCHAR2(20) NOT NULL,
+   Total_Checked_Out NUMBER(20) NOT NULL
+   
+);
+--Reader personal info
+
+CREATE TABLE Staff(
+   Staff_id INTEGER PRIMARY KEY NOT NULL,
+   Email VARCHAR2 (30) NOT NULL,
+   First_name VARCHAR2(20) NOT NULL,
+   Last_name VARCHAR2(20) NOT NULL 
+);
+-- Staff member logins into system to help a reader check out book(s) 
+
+CREATE TABLE Validation(
+   Staff_id INTEGER NOT NULL CONSTRAINT Validation_id_fk REFERENCES Staff (Staff_id)PRIMARY KEY,
+   Password VARCHAR2(30) NOT NULL
+  );
+-- Login info of staff member helping check out book 
+
+
+CREATE TABLE Books (
+  Title VARCHAR2(50) NOT NULL,
+  AuthorFirstName VARCHAR2(50) NOT NULL,
+  AuthorLastName VARCHAR2(50) NOT NULL,
+  Genre VARCHAR2(50) NOT NULL,
+  ISBN INTEGER NOT NULL,
+  NumOfBook INTEGER,
+  Price INTEGER,
+  Published DATE,
+  publishingHouse VARCHAR2(50) NOT NULL,
+  Barcode_number NUMBER(30) NOT NULL PRIMARY KEY 
+);
+
+-- Info related to each library book
+
+CREATE TABLE Checkout (
+  Item_num INTEGER NOT NULL PRIMARY KEY,
+  Staff_id INTEGER NOT NULL CONSTRAINT Checkout_staff_id_fk REFERENCES Staff (Staff_id),
+  Libcard_num NUMBER(20) NOT NULL CONSTRAINT Checkout_cardNum_fk REFERENCES Readers (Libcard_num), 
+  CheckOut DATE NOT NULL,
+  Due_date DATE NOT NULL, --three weeks from checkout date
+  Barcode_number NUMBER(30) NOT NULL CONSTRAINT Checkout_barcode_fk REFERENCES Books(Barcode_number)
+);
+-- Info related to time of books being checked out
+
+CREATE TABLE CheckIn (
+  Item_num INTEGER NOT NULL PRIMARY KEY,
+  Staff_id INTEGER NOT NULL CONSTRAINT Checkin_staff_id_fk REFERENCES Staff (Staff_id),
+  Libcard_num NUMBER(20) NOT NULL CONSTRAINT Checkin_cardNum_fk REFERENCES Readers (Libcard_num), 
+  CheckInDate DATE NOT NULL,
+  Barcode_number NUMBER(30) NOT NULL CONSTRAINT Checkin_barcode_fk REFERENCES Books(Barcode_number)
+);
+
+-- Info related to time of books being checked in
+
+CREATE TABLE BookLocation (
+  Library_branch VARCHAR2(30) NOT NULL,
+  Room INTEGER NOT NULL,
+  Barcode_number NUMBER(30) NOT NULL CONSTRAINT BookLocation_barcode_fk REFERENCES Books(Barcode_number),
+  CONSTRAINT pk_BookLocation 
+      PRIMARY KEY(Barcode_number)
+);
+
+-- Information on the Location of the book
+
+CREATE TABLE Publisher ( 
+  Barcode_number NUMBER(30) NOT NULL CONSTRAINT Publisher_callnum_fk REFERENCES Books(Barcode_number),
+  yearPublished INTEGER,
+  publishingHouse VARCHAR2(50) NOT NULL,
+  publisherId INTEGER PRIMARY KEY NOT NULL
+ 
+);
+
+-- Publisher info of the book
