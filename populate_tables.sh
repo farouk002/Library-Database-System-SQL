@@ -1,0 +1,31 @@
+#!/bin/sh
+#export LD_LIBRARY_PATH=/usr/lib/oracle/12.1/client64/lib
+
+echo "Enter username"
+read username
+
+echo "password"
+read -s password
+
+sqlplus64 "$username/$password@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=oracle.scs.ryerson.ca)(Port=1521))(CONNECT_DATA=(SID=orcl)))" <<EOF
+INSERT INTO Readers (Libcard_num,Address,Email,First_name,Last_name,Total_Checked_Out) Values ('724946821','350 Victoria St, Toronto, ON M5B 2K3','John.quil@ryerson.ca','John','Quil','1');
+INSERT INTO Readers (Libcard_num,Address,Email,First_name,Last_name,Total_Checked_Out) Values ('724946822','1080 Bay St, Toronto, ON M5S 0A5','Alice.walker@ryerson.ca','Alice','Walker','2');
+INSERT INTO Readers (Libcard_num,Address,Email,First_name,Last_name,Total_Checked_Out) Values ('724946823','240 Jarvis St, Toronto, ON M5B 2L1','Peter.russell@ryerson.ca','Peter','Russell','0');
+INSERT INTO Staff (Staff_id,Email,First_name,Last_name) Values ('501022329','Jen.kimberly@ryerson.ca','Jen','Kimberly');
+INSERT INTO Staff (Staff_id,Email,First_name,Last_name) Values ('501022330','Ronny.eric@ryerson.ca','Ronny','Eric');
+INSERT INTO Staff (Staff_id,Email,First_name,Last_name) Values ('501022331','Ben.jay@ryerson.ca','Ben','Jay');
+INSERT INTO Validation (Staff_id,Password) Values ('501022329','Jen123');
+INSERT INTO Validation (Staff_id,Password) Values ('501022330','Ronny789');
+INSERT INTO Validation (Staff_id,Password) Values ('501022331','Benj1');
+INSERT INTO Books (Title,AuthorFirstName,AuthorLastName,Genre,ISBN,NumOfBook,Price,Published,publishingHouse,Barcode_number) Values ('Social Engineering: The Science of Human Hacking','Christopher','Hadnagy','technology','9781119433385','55','38','2018-02-13','Wiley','9781119433385');
+INSERT INTO Books (Title,AuthorFirstName,AuthorLastName,Genre,ISBN,NumOfBook,Price,Published,publishingHouse,Barcode_number) Values ('Cybersecurity Essentials','Charles','Brooks','technology','9781119362456','45','31','2018-06-24','Wiley','1119362458');
+INSERT INTO Books (Title,AuthorFirstName,AuthorLastName,Genre,ISBN,NumOfBook,Price,Published,publishingHouse,Barcode_number) Values ('The Life of Cheese','Jennifer','Bus','Fiction','9781000365151','6','20','2000-01-24','bookhouse','1119360000');
+INSERT INTO Checkout (Item_num,Staff_id,Libcard_num,CheckOut,Due_date,Barcode_number) Values ('45','501022329','724946821','01-09-22','21-09-22','9781119433385');
+INSERT INTO Checkout (Item_num,Staff_id,Libcard_num,CheckOut,Due_date,Barcode_number) Values ('5','501022329','724946822','01-09-22','21-10-22','1119362458');
+INSERT INTO Checkout (Item_num,Staff_id,Libcard_num,CheckOut,Due_date,Barcode_number) Values ('4','501022329','724946822','01-09-22','15-10-22','1119360000');
+INSERT INTO BookLocation (Library_branch,Room,Barcode_number) Values('Yonge St','066','9781119433385');
+INSERT INTO BookLocation (Library_branch,Room,Barcode_number) Values('North york','06','1119362458');
+INSERT INTO BookLocation (Library_branch,Room,Barcode_number) Values('Yonge St','060','1119360000');
+INSERT INTO Publisher (Barcode_number,yearPublished,publishingHouse,publisherId) Values ('1119362458','2018','Wiley','1024');
+
+EOF
